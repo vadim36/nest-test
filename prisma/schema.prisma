@@ -13,22 +13,18 @@ model User {
   password  String
   banned    Boolean    @default(false)
   banReason String     @default("")
-  roles     UserRole[]
-}
-
-model UserRole {
-  userId String
-  roleId String
-  user   User   @relation(fields: [userId], references: [userId])
-  role   Role   @relation(fields: [roleId], references: [roleId])
-
-  @@id([userId, roleId])
+  roles     Role[]
 }
 
 model Role {
   roleId String     @id @default(uuid())
   value  Roles      @unique @default(Base)
-  users  UserRole[]
+  users  User[] 
+}
+
+model Person {
+  id  String @id @default(uuid())
+  name String
 }
 
 enum Roles {

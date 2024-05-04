@@ -1,9 +1,12 @@
+import { $Enums, Role } from "@prisma/client";
 import { ApiProperty } from "@nestjs/swagger";
-import type { $Enums, Role } from "@prisma/client";
+import UserRoleModel from "src/users/user.model";
 
 export default class RoleModel implements Role {
-  @ApiProperty({example: 'uuid', description: 'Идентификатор роли'})
+  @ApiProperty({description: 'Identifier', example: 'uuid'})
   roleId: string;
-  @ApiProperty({example: 'Base', description: 'Роль'})
+  @ApiProperty({description: 'Role', example: $Enums.Roles.Base})
   value: $Enums.Roles;
+  @ApiProperty({description: 'Users with this role', example: 'Average user'})
+  users?: UserRoleModel[]
 }

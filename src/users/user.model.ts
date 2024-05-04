@@ -1,15 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
-import type { User } from "@prisma/client";
+import { $Enums, User } from "@prisma/client";
+import UserRoleModel from "src/roles/user-role.model";
 
 export default class UserModel implements User {
-  @ApiProperty({example: '1', description: 'Identifier'})
+  @ApiProperty({description: 'Identifier', example: 'uuid'})
   userId: string;
-  @ApiProperty({example: 'test@gmail.co', description: 'Email'})
+  @ApiProperty({description: 'Email', example: 'test@gmail.com'})
   email: string;
-  @ApiProperty({example: 'password', description: 'Password'})
+  @ApiProperty({description: 'Password', example: 'Password'})
   password: string;
-  @ApiProperty({example: false, description: 'Is user banned'})
+  @ApiProperty({description: 'is banned', example: false})
   banned: boolean;
-  @ApiProperty({example: 'For insults', description: 'Reason for ban'})
+  @ApiProperty({description: 'Ban reason', example: 'For insults'})
   banReason: string;
+  @ApiProperty({description: 'User`s role', example: [$Enums.Roles.Base]})
+  roles?: UserRoleModel[]
 }

@@ -1,27 +1,26 @@
-import { Body, Controller, Get, Param } from '@nestjs/common';
-import { Post } from '@nestjs/common';
-import { RolesService } from './roles.service';
-import CreateRoleDto from './dto/create-role-dto';
-import type { $Enums, Role } from '@prisma/client';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import RoleModel from './role.model';
+import { RolesService } from './roles.service';
+import CreateRoleDto from './dto/create-role-dto';
+import { $Enums } from '@prisma/client';
 
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {
-  constructor(private rolesService: RolesService) {}
-  
-  @ApiOperation({summary: 'Role creation'})
+  constructor (private roleService: RolesService) {}
+
+  @ApiOperation({summary: 'Creation role'})
   @ApiResponse({status: 201, type: RoleModel})
   @Post()
-  async createRole(@Body() dto: CreateRoleDto):Promise<Omit<Role, 'roleId'>> {
-    return await this.rolesService.createRole(dto)
+  async createRole(@Body() roleDto: CreateRoleDto):Promise<RoleModel> {
+    return await this.roleService.createRole(roleDto)
   }
 
-  @ApiOperation({summary: 'Getting role by value'})
+  @ApiOperation({summary: 'Getting role by its value'})
   @ApiResponse({status: 200, type: RoleModel})
   @Get('/:value')
-  async getRoleByValue(@Param('value') value: $Enums.Roles):Promise<Role> {
-    return await this.rolesService.getRoleByValue(value)
+  async getRoleByValue(@Param('value') value: $Enums.Roles):Promise<RoleModel> {
+    return await this.roleService.getRoleByValue(value)
   }
 }
