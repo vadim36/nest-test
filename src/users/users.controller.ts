@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import CreateUserDto from './dto/create-user-dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import UserModel from './user.model';
 import { UsersService } from './users.service';
 
-@ApiTags('users')
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor (private usersService: UsersService) {}
@@ -21,5 +21,12 @@ export class UsersController {
   @Get()
   async getUsers():Promise<UserModel[]> {
     return await this.usersService.getUsers()
+  }
+
+  @ApiOperation({summary: 'Get user by email'})
+  @ApiResponse({status: 200, type: UserModel})
+  @Get('/:email')
+  async getUserByEmail(@Param() email: string):Promise<UserModel> {
+    return await this.usersService.getUserByEmail(email)
   }
 }

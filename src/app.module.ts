@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from '@nestjs/config'
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
+import { AuthModule } from './auth/auth.module';
 import PrismaService from "./db/prisma.service";
 
 @Module({
@@ -12,6 +13,7 @@ import PrismaService from "./db/prisma.service";
     }),
     UsersModule,
     RolesModule,
+    AuthModule,
   ],
 })
 export default class AppModule {}
