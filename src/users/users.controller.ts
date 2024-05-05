@@ -5,6 +5,7 @@ import UserModel from './user.model';
 import { UsersService } from './users.service';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
+import AddRoleDto from './dto/ad-role-dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -32,5 +33,12 @@ export class UsersController {
   @Get('/:email')
   async getUserByEmail(@Param() email: string):Promise<UserModel> {
     return await this.usersService.getUserByEmail(email)
+  }
+
+  @ApiOperation({summary: 'Add user a role'})
+  @ApiResponse({status: 201, type: UserModel})
+  @Post('/role')
+  async addRole(@Body() roleDto: AddRoleDto) {
+    return await this.usersService.addRole(roleDto)
   }
 }

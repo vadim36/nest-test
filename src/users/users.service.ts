@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import PrismaService from 'src/db/prisma.service';
 import CreateUserDto from './dto/create-user-dto';
 import UserModel from './user.model';
 import { RolesService } from 'src/roles/roles.service';
+import AddRoleDto from './dto/ad-role-dto';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +29,21 @@ export class UsersService {
   async getUserByEmail(email: string):Promise<UserModel> {
     return await this.prismaService.user.findUnique({
       where: {email},
+      include: {roles: true}
+    })
+  }
+
+  async addRole(roleDto: AddRoleDto):Promise<UserModel> {
+    const user = await this.getUserByEmail(roleDto.email)
+    const role = await this.roleService.getRoleByValue(roleDto.value)
+
+    if (!user || !role) {
+      throw new HttpException('User or role were not founded', HttpStatus.NOT_FOUND)
+    }
+
+    return await this.prismaService.user.update({
+      where: {email: user.email},
+      data: {roles: { connect: { roleId: role.roleId }}},
       include: {roles: true}
     })
   }
