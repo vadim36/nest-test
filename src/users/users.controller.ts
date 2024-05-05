@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import CreateUserDto from './dto/create-user-dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import UserModel from './user.model';
 import { UsersService } from './users.service';
+import JwtAuthGuard from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Users')
 @Controller('users')
@@ -18,6 +19,7 @@ export class UsersController {
 
   @ApiOperation({summary: 'Getting all the users'})
   @ApiResponse({status: 200, type: [UserModel]})
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getUsers():Promise<UserModel[]> {
     return await this.usersService.getUsers()
