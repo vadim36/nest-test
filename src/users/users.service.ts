@@ -27,7 +27,8 @@ export class UsersService {
 
   async getUserByEmail(email: string):Promise<UserModel> {
     return await this.prismaService.user.findUnique({
-      where: {email}
+      where: {email},
+      include: {roles: true}
     })
   }
 }
