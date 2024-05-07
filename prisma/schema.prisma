@@ -14,12 +14,22 @@ model User {
   banned    Boolean    @default(false)
   banReason String     @default("")
   roles     Role[]
+  posts     Post[]
 }
 
 model Role {
   roleId String     @id @default(uuid())
   value  Roles      @unique @default(Base)
-  users  User[] 
+  users  User[]
+}
+
+model Post {
+  postId      String @id @default(uuid())
+  title       String
+  content     String
+  image       String
+  authorEmail String
+  author      User   @relation(fields: [authorEmail], references: [email])
 }
 
 enum Roles {
