@@ -4,6 +4,7 @@ import CreateUserDto from './dto/create-user-dto';
 import UserModel from './user.model';
 import { RolesService } from 'src/roles/roles.service';
 import AddRoleDto from './dto/ad-role-dto';
+import BanUserDto from './dto/ban-user-dto';
 
 @Injectable()
 export class UsersService {
@@ -46,5 +47,21 @@ export class UsersService {
       data: {roles: { connect: { roleId: role.roleId }}},
       include: {roles: true}
     })
+  }
+
+  async ban(banDto: BanUserDto):Promise<UserModel> {
+    const user = await this.prismaService.user.update({
+      where: {email: banDto.email},
+      data: {
+        banReason: banDto.banReason,
+        banned: true
+      }
+    })
+
+    if (!user) {
+      throw new HttpException('User does not found', HttpStatus.NOT_FOUND)
+    } 
+
+    return user
   }
 }
